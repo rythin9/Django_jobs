@@ -22,7 +22,7 @@
 - 打开`localhost:8000`端口即可看见效果
 
 
-##一些用到的命令
+## 一些用到的命令
 - Python的安装：略
 - 安装Django：`pip install django`,默认为最新版本，可在后面加上版本号安装自己想要的版本
 - 新建Django项目：`django-admin startproject xxx`,'xxx'表示项目名称。
