@@ -1,0 +1,11 @@
+CREATE TABLE `newzhaopin` (
+  `id` int(11) DEFAULT NULL,
+  `position` char(50) DEFAULT NULL,
+  `minsalary` float DEFAULT NULL,
+  `avgsalary` float DEFAULT NULL,
+  `maxsalary` float DEFAULT NULL,
+  `link` char(100) DEFAULT NULL,
+  `workspace` char(60) DEFAULT NULL,
+  `publish` char(60) DEFAULT NULL,
+  `comname` char(60) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

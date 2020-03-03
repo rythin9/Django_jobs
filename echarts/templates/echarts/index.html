@@ -1,0 +1,170 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>全国岗位分析</title>
+    <link rel="stylesheet" href="../../static/css/main.css" rel="stylesheet">
+    <style></style>
+</head>
+<body>
+<div id="title">去哪儿工作</div>
+<div id="left1">
+    <div id="gang_wei">
+        <h2>岗位总数：</h2>
+        <span id="job_counts">{{ job_counts }}</span>
+    </div>
+
+</div>
+<div id="right1">
+    <div id="pie_charts" style="height: 100%">
+        <script type="text/javascript" src="{% static 'js/echarts.js' %}"></script>
+        <script type="text/javascript">
+            var dom = document.getElementById("pie_charts");
+            var myChart = echarts.init(dom);
+            var pie_data = getData()
+            var app = {};
+            option = null;
+            option = {
+                title: {
+                    text: '岗位占比示意图',
+                    subtext: '',
+                    left: 'center'
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{a} <br/>{b} : {c} ({d}%)'
+                },
+                legend: {
+                    orient: 'vertical',
+                    left: 'left',
+                    data: pie_data.legendData,
+                },
+                series: [
+                    {
+                        name: '岗位来源',
+                        type: 'pie',
+                        radius: '55%',
+                        center: ['50%', '60%'],
+                        data: pie_data.seriesData,
+                        emphasis: {
+                            itemStyle: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    }
+                ]
+            };
+
+            function getData() {
+                var legendData = []
+                var seriesData = []
+                var selected = {}
+                {% for item in jobs_class %}
+                    legendData.push('{{ item.0 }}');
+                    seriesData.push({
+                        name: '{{ item.0 }}',
+                        value: {{ item.1 }},
+                    });
+                    selected['{{ item.0 }}'] = true;
+                {% endfor %}
+                return {
+                    legendData: legendData,
+                    seriesData: seriesData,
+                    selected: selected,
+                };
+            }
+
+            if (option && typeof option === "object") {
+                myChart.setOption(option, true);
+            }
+
+        </script>
+    </div>
+</div>
+<div id="center1">
+    <div class="txt">
+        <p>{{ workspace }}的{{ comname }}在{{ publish }}发布了一个月薪最高为[{{ maxsalary }}]K的[{{ position }}]职位，点击
+            <a href="{{ link }}">[这里]</a>快速查看该公司的详情信息
+        </p>
+    </div>
+</div>
+<div id="center2">
+    <div id="bar_echarts" style="height: 100%"></div>
+    <script type="text/javascript">
+        var dom = document.getElementById("bar_echarts");
+        var myChart = echarts.init(dom);
+        var bar_data = getData_bar()
+        var app = {};
+        option = null;
+        option = {
+            tooltip: {
+                trigger: 'item',
+            },
+            title: {
+                text: '岗位数量示意图',
+                x: 'center',
+                subtext: '来源：Django + MySql + Echarts'
+            },
+            xAxis: {
+                type: 'category',
+                data: getData_bar().legendData,
+            },
+            //添加X轴滚动条
+            dataZoom: [{
+                type: 'slider',
+                show: true,
+                xAxisIndex: [0],
+                left: '9%',
+                bottom: 0,
+                start: 0,
+                end: 10, //初始化滚动条
+            }],
+            yAxis: {
+                type: 'value'
+            },
+            series: [{
+                data: bar_data.seriesData,
+                type: 'bar'
+            }]
+        };
+
+        function getData_bar() {
+            var legendData = []
+            var seriesData = []
+            var selected = {}
+            {% for item in city_class %}
+                legendData.push('{{ item.0 }}');
+                seriesData.push({
+                    {#name: '{{ item.0 }}',#}
+                    value: {{ item.1 }},
+                });
+                selected['{{ item.0 }}'] = true;
+            {% endfor %}
+            return {
+                legendData: legendData,
+                seriesData: seriesData,
+                selected: selected,
+            };
+        }
+
+        if (option && typeof option === "object") {
+            myChart.setOption(option, true);
+        }
+    </script>
+</div>
+<div id="footer">
+    <p class="text-muted">
+        Design By &nbsp<span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp
+        <a href="mailto:rythin9@gmail.com">Rythin9</a>&nbsp
+        <span class="glyphicon glyphicon-grain" aria-hidden="true"></span>
+        <a href="https://github.com/rythin9/jobs">Github</a>
+        &nbsp Copyright &copy; 2020 东华理工大学
+    </p>
+</div>
+</body>
+
+
+</html>
